@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="SimulationController">
+    <TableView fx:id="tableProcesses" layoutX="20" layoutY="20" prefWidth="500" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="arrivalTimeColumn" text="Arrival Time" prefWidth="150"/>
+            <TableColumn fx:id="burstTimeColumn" text="Burst Time" prefWidth="150"/>
+            <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <Label layoutX="20" layoutY="340" text="Arrival Time:"/>
+    <TextField fx:id="textFieldArrivalTime" layoutX="100" layoutY="340" prefWidth="100"/>
+
+    <Label layoutX="220" layoutY="340" text="Burst Time:"/>
+    <TextField fx:id="textFieldBurstTime" layoutX="300" layoutY="340" prefWidth="100"/>
+
+    <Label layoutX="420" layoutY="340" text="Priority:"/>
+    <TextField fx:id="textFieldPriority" layoutX="500" layoutY="340" prefWidth="100"/>
+
+    <Button fx:id="buttonAdd" layoutX="20" layoutY="380" text="Add"/>
+    <Button fx:id="buttonDelete" layoutX="100" layoutY="380" text="Delete"/>
+    <Button fx:id="buttonCalculate" layoutX="180" layoutY="380" text="Calculate"/>
+    <Button fx:id="buttonVisualization" layoutX="280" layoutY="380" text="Visualize Chart"/>
+
+    <Label fx:id="labelMetrics" layoutX="20" layoutY="420" prefWidth="500" wrapText="true"/>
+</AnchorPane>
