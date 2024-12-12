@@ -1,28 +1,28 @@
 package com.example.cpuscheduler.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 public abstract class Scheduler {
-    private List<com.example.cpuscheduler.model.Process> processes = new ArrayList<com.example.cpuscheduler.model.Process>();
+    protected List<Process> processes;  // Danh sách các tiến trình
 
-    public Scheduler(List<com.example.cpuscheduler.model.Process> processes) {
+    // Constructor để khởi tạo danh sách tiến trình
+    public Scheduler(List<Process> processes) {
         this.processes = processes;
     }
 
-    public double calTurnAroundTime() {
-        return 0;
-    };
+    // Các phương thức trừu tượng để tính toán các chỉ số hiệu suất
+    public abstract double calTurnAroundTime();
+    public abstract double calWaitingTime();
+    public abstract double calCPUUtilizationBased();
 
-    public double calWaitingTime(){
-        return 0;
-    };
+    // Phương thức lập lịch các tiến trình (các lớp con sẽ cài đặt)
+    public abstract LinkedHashMap<Integer, Double> schedule();
 
-    public double calCPUUtilizationBased(){
-        return 0;
-    };
-
-    public List<Process> schedule(){
-        return null;
-    }
+	public double calculateCPUUtilization() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
+
+
