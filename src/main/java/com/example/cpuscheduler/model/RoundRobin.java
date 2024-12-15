@@ -1,5 +1,8 @@
 package com.example.cpuscheduler.model;
 
+import javafx.util.Pair;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoundRobin extends Scheduler {
@@ -13,13 +16,14 @@ public class RoundRobin extends Scheduler {
         this.quantumTime = quantumTime;
     }
 
-    public RoundRobin(List<com.example.cpuscheduler.model.Process> processes) {
+    public RoundRobin(List<com.example.cpuscheduler.model.Process> processes, double quantumTime) {
         super(processes);
+        this.quantumTime = quantumTime;
     }
 
     @Override
-    public List<Process> schedule() {
-        return null;
+    public List<Pair<Integer, Pair<Double, Double>>> schedule(){
+        List<Pair<Integer, Pair<Double,Double>>> list = new ArrayList<Pair<Integer, Pair<Double,Double>>>();
+        return list;
     }
-
 }
