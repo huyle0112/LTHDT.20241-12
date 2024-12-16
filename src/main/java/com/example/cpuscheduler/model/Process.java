@@ -6,6 +6,10 @@ public class Process {
     private double burstTime;
     private int priority;
 
+    // Thêm hai thuộc tính này
+    private double startTime; 
+    private double completionTime;
+
     public Process(){}
 
     public Process(int id, double arrivalTime, double burstTime, int priority) {
@@ -39,5 +43,21 @@ public class Process {
     }
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public double getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(double startTime) {
+        this.startTime = startTime;
+    }
+
+    public double getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(double completionTime) {
+        this.completionTime = completionTime;
     }
 }
