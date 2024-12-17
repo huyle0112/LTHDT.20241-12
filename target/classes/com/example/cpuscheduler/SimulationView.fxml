@@ -10,12 +10,24 @@
    <items>
       <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="666.0">
          <children>
-            <Pane fx:id="pane" layoutX="24.0" layoutY="112.0" prefHeight="345.0" prefWidth="635.0" />
-            <Label layoutX="24.0" layoutY="37.0" prefHeight="27.0" prefWidth="167.0" text="Gantt Chart" />
-            <Label fx:id="averageWaitingTimeLabel" layoutX="45.0" layoutY="456.0" prefHeight="39.0" prefWidth="293.0" text="Average Waiting Time: " />
-            <Label fx:id="turnaroundTimeLabel" layoutX="45.0" layoutY="503.0" prefHeight="39.0" prefWidth="293.0" text="Turnaround Time:" />
-            <Label fx:id="cpuUtilizationLabel" layoutX="45.0" layoutY="548.0" prefHeight="40.0" prefWidth="293.0" text="CPU Utilization:" />
-            <Button fx:id="goBackButton" layoutX="268.0" layoutY="606.0" mnemonicParsing="false" onAction="#handleGoBack" text="Go Back" />
+            <Pane fx:id="pane" layoutX="16.0" layoutY="78.0" prefHeight="338.0" prefWidth="635.0" style="-fx-border-color: black;" />
+            <Label layoutX="16.0" layoutY="33.0" prefHeight="27.0" prefWidth="167.0" text="Gantt Chart">
+               <font>
+                  <Font size="22.0" />
+               </font></Label>
+            <Button fx:id="goBackButton" layoutX="289.0" layoutY="613.0" mnemonicParsing="false" onAction="#handleGoBack" text="Go Back" />
+            <Pane layoutX="16.0" layoutY="453.0" prefHeight="160.0" prefWidth="635.0" style="-fx-border-color: black;">
+               <children>
+                  <Label fx:id="averageWaitingTimeLabel" layoutX="24.0" layoutY="14.0" prefHeight="39.0" prefWidth="293.0" text="Average Waiting Time: " />
+                  <Label fx:id="turnaroundTimeLabel" layoutX="24.0" layoutY="61.0" prefHeight="39.0" prefWidth="293.0" text="Turnaround Time:" />
+                  <Label fx:id="cpuUtilizationLabel" layoutX="24.0" layoutY="106.0" prefHeight="40.0" prefWidth="293.0" text="CPU Utilization:" />
+               </children>
+            </Pane>
+            <Label layoutX="16.0" layoutY="423.0" text="Time Metrics">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children></Pane>
       <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="666.0" prefWidth="333.0">
          <children>
@@ -27,7 +39,10 @@
                   <TableColumn fx:id="priorityColumn" prefWidth="74.0" text="Priority" />
               </columns>
             </TableView>
-            <Label fx:id="titleLabel" layoutX="14.0" layoutY="20.0" prefHeight="71.0" prefWidth="311.0" text="Label" />
+            <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="71.0" prefWidth="311.0" text="Label">
+               <font>
+                  <Font size="22.0" />
+               </font></Label>
             <Label layoutX="14.0" layoutY="519.0" prefHeight="10.0" prefWidth="75.0" text="Arrival time" />
             <Label layoutX="14.0" layoutY="568.0" prefHeight="10.0" prefWidth="57.0" text="Burst time" />
             <Label fx:id="priorityLabel" layoutX="14.0" layoutY="618.0" prefHeight="16.0" prefWidth="57.0" text="Priority " />

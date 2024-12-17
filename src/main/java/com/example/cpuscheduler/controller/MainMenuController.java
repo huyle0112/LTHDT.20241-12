@@ -14,43 +14,34 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainMenuController {
-
-    @FXML
-    private Button buttonRoundRobin;
-
-    @FXML
-    private Button buttonFCFS;
-
-    @FXML
-    private Button buttonSJN;
-
-    @FXML
-    private Button buttonHelp;
-
     private Stage stage;
 
     public static String currentStage;
 
     @FXML
     void handleFCFS(ActionEvent event) throws IOException{
+        // thuật toán lựa chọn là FCFS
         currentStage = "FCFS";
         openStageSimulation("FCFS", event);
     }
 
     @FXML
     void handleSJN(ActionEvent event) throws IOException {
+        // thuật toán lựa chọn là SJN
         currentStage = "SJN";
         openStageSimulation("SJN", event);
     }
 
     @FXML
     void handleRoundRobin(ActionEvent event) throws IOException {
+        // thuật toán lựa chọn là RoundRobin
         currentStage = "Round Robin";
         openStageSimulation("Round Robin", event);
     }
 
     @FXML
     void handleHelp(){
+        // giải thích thuật toán bằng alert information
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Giải thích thuật toán");
         alert.setHeaderText(null);
@@ -101,6 +92,7 @@ public class MainMenuController {
     }
 
     private void setupCloseConfirmation(Stage stage) throws IOException {
+        // hộp thoại xác nhận đóng chương trình
         stage.setOnCloseRequest(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Thoát chương trình?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Exit Confirmation");
@@ -113,6 +105,7 @@ public class MainMenuController {
     }
 
     public void closeStage(Stage stage) throws IOException {
+        // truyền method cho application
         this.stage = stage;
         setupCloseConfirmation(stage);
     }
