@@ -13,6 +13,10 @@ public class SJN extends Scheduler {
 
     @Override
     public List<Pair<Integer, Pair<Double, Double>>> schedule(){
+        for (Process p : processes) {
+            p.setCompletionTime(0.0);
+            p.setStartTime(0.0);
+        }
         List<Pair<Integer, Pair<Double,Double>>> result = new ArrayList<>();
         if (processes.isEmpty()) {
             return result;

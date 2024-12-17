@@ -50,7 +50,7 @@ public abstract class Scheduler {
      * Tính CPU Utilization
      * CPU Utilization = (Tổng BurstTime / Thời gian từ start đến completion cuối cùng) * 100%
      */
-    public double calCPUUtilizationbased() {
+    public double calCPUUtilization() {
         if (processes.isEmpty()) return 0.0;
 
         double totalBurst = 0.0;
@@ -64,19 +64,5 @@ public abstract class Scheduler {
         }
 
         return lastCompletion > 0 ? (totalBurst / lastCompletion) * 100.0 : 0.0;
-    }
-
-    /**
-     * Hàm tiện ích: trả về danh sách process hiện tại.
-     */
-    public List<Process> getProcesses() {
-        return processes;
-    }
-
-    /**
-     * Hàm tiện ích: đặt lại danh sách process.
-     */
-    public void setProcesses(List<Process> processes) {
-        this.processes = new ArrayList<>(processes);
     }
 }

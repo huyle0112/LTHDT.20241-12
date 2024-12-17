@@ -11,6 +11,7 @@ import java.io.IOException;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+        // load mainmenu view
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/cpuscheduler/MainMenuView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         MainMenuController controller = fxmlLoader.getController();

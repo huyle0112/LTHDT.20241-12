@@ -14,6 +14,10 @@ public class FCFS extends Scheduler {
     @Override
     public List<Pair<Integer, Pair<Double, Double>>> schedule(){
         List<Pair<Integer, Pair<Double,Double>>> ganttChart = new ArrayList<>();
+        for (Process p : processes) {
+            p.setCompletionTime(0.0);
+            p.setStartTime(0.0);
+        }
 
         // Sắp xếp theo thời gian đến
         processes.sort(Comparator.comparingDouble(Process::getArrivalTime));

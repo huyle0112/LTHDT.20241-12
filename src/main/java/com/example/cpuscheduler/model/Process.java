@@ -6,7 +6,6 @@ public class Process {
     private double burstTime;
     private int priority;
 
-    // Thêm hai thuộc tính này
     private double startTime; 
     private double completionTime;
 
@@ -27,9 +26,6 @@ public class Process {
     }
     public double getBurstTime() {
         return burstTime;
-    }
-    public int getPriority() {
-        return priority;
     }
 
     public void setId(int id) {
