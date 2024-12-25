@@ -29,8 +29,7 @@ import java.util.ResourceBundle;
 
 public class SimulationController implements Initializable {
 
-    @FXML
-    public Label priorityLabel;
+   
 
     @FXML
     private Pane pane;
@@ -48,14 +47,12 @@ public class SimulationController implements Initializable {
     @FXML
     private TextField arrivalTimeTextField;
 
-    @FXML
-    private TableColumn<Process, Integer> priorityColumn;
+    
 
     @FXML
     private TableColumn<Process, Double> arrivalTimeColumn;
 
-    @FXML
-    private TextField priorityTextField;
+   
 
     @FXML
     private TableColumn<Process, Integer> idColumn;
@@ -86,23 +83,23 @@ public class SimulationController implements Initializable {
         // Khởi tạo simulaton stage
         processList = FXCollections.observableArrayList(
                 // các ví dụ có sẵn trong bảng tiến trình
-                new Process(1, 0.0,5.0,1),
-                new Process(2, 2.0,6.0,2),
-                new Process(3, 3.0, 7.0, 3)
+                new Process(1, 0.0,5.0),
+                new Process(2, 2.0,6.0),
+                new Process(3, 3.0, 7.0)
         );
         idColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
         arrivalTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("arrivalTime"));
         burstTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("burstTime"));
-        priorityColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("priority"));
+        
         table.setItems(processList);
 
         if(MainMenuController.currentStage.equals("FCFS")){
             // thuật toán lựa chọn là FCFS, ẩn đi các đối tượng không sử dụng
             quantumTimeLabel.setVisible(false);
             quantumTimeTextField.setVisible(false);
-            priorityColumn.setVisible(false);
-            priorityTextField.setVisible(false);
-            priorityLabel.setVisible(false);
+            
+           
+            
             idColumn.setPrefWidth(idColumn.getWidth() + 24);
             burstTimeColumn.setPrefWidth(burstTimeColumn.getWidth() + 50);
             arrivalTimeColumn.setPrefWidth(arrivalTimeColumn.getWidth() + 50);
@@ -122,9 +119,7 @@ public class SimulationController implements Initializable {
 
         if(MainMenuController.currentStage.equals("Round Robin")) {
             // thuật toán sử dụng là Round Robin, ẩn đi các đối tượng không sử dụng
-            priorityColumn.setVisible(false);
-            priorityTextField.setVisible(false);
-            priorityLabel.setVisible(false);
+            
             idColumn.setPrefWidth(idColumn.getWidth() + 24);
             burstTimeColumn.setPrefWidth(burstTimeColumn.getWidth() + 50);
             arrivalTimeColumn.setPrefWidth(arrivalTimeColumn.getWidth() + 50);
@@ -268,12 +263,12 @@ public class SimulationController implements Initializable {
         }
         newProcess.setArrivalTime(Double.parseDouble(arrivalTimeTextField.getText()));
         newProcess.setBurstTime(Double.parseDouble(burstTimeTextField.getText()));
-        if(MainMenuController.currentStage.equals("SJN"))newProcess.setPriority(Integer.parseInt(priorityTextField.getText()));
-        else newProcess.setPriority(0);
+        
         // id được set tự động
         if(processList.isEmpty())newProcess.setId(1);
         else{
-            newProcess.setId(processList.getLast().getId() + 1);
+            //newProcess.setId(processList.getLast().getId() + 1);
+            newProcess.setId(processList.get(processList.size() - 1).getId() + 1);
         }
         processList.add(newProcess);
     }

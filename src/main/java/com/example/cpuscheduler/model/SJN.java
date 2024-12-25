@@ -12,54 +12,73 @@ public class SJN extends Scheduler {
     }
 
     @Override
-    public List<Pair<Integer, Pair<Double, Double>>> schedule(){
-        for (Process p : processes) {
-            p.setCompletionTime(0.0);
-            p.setStartTime(0.0);
-        }
-        List<Pair<Integer, Pair<Double,Double>>> result = new ArrayList<>();
+    public List<Pair<Integer, Pair<Double, Double>>> schedule() {
+        List<Pair<Integer, Pair<Double, Double>>> ganttChart = new ArrayList<>();
         if (processes.isEmpty()) {
-            return result;
+            return ganttChart;
         }
 
-        // Sắp xếp process theo thời gian đến
+        // Sắp xếp processes theo arrivalTime
         processes.sort(Comparator.comparingDouble(Process::getArrivalTime));
 
-        List<Process> readyQueue = new ArrayList<>();
-        double currentTime = 0.0;
-        int completed = 0;
+        double currentTime = 0.0; // Thời gian hiện tại
+        int completed = 0;       // Số tiến trình đã hoàn thành
         int n = processes.size();
 
+        // Danh sách lưu remainingBurstTime cho từng tiến trình
+        double[] remainingBurstTime = new double[n];
+        for (int i = 0; i < n; i++) {
+            remainingBurstTime[i] = processes.get(i).getBurstTime();
+        }
+
+        Process currentProcess = null; // Tiến trình đang chạy
+
         while (completed < n) {
-            // Thêm process vào hàng đợi nếu đã đến
-            for (Process p : processes) {
-                if (p.getArrivalTime() <= currentTime && p.getCompletionTime() == 0 && !readyQueue.contains(p)) {
-                    readyQueue.add(p);
+            // Tìm tiến trình có burstTime nhỏ nhất đã đến (arrivalTime <= currentTime)
+            int shortestJobIndex = -1;
+            double shortestBurstTime = Double.MAX_VALUE;
+
+            for (int i = 0; i < n; i++) {
+                Process process = processes.get(i);
+
+                if (process.getArrivalTime() <= currentTime && process.getCompletionTime() == 0
+                        && remainingBurstTime[i] < shortestBurstTime && remainingBurstTime[i] > 0) {
+                    shortestJobIndex = i;
+                    shortestBurstTime = remainingBurstTime[i];
                 }
             }
 
-            // Nếu hàng đợi có process
-            if (!readyQueue.isEmpty()) {
-                // Chọn process có burstTime ngắn nhất
-                readyQueue.sort(Comparator.comparingDouble(Process::getBurstTime));
-                Process current = readyQueue.remove(0);
+            // Nếu không có tiến trình nào sẵn sàng
+            if (shortestJobIndex == -1) {
+                currentTime++; // Nhảy thời gian
+                continue;
+            }
 
-                double startTime = Math.max(currentTime, current.getArrivalTime());
-                double completionTime = startTime + current.getBurstTime();
+            Process shortestJob = processes.get(shortestJobIndex);
 
-                current.setStartTime(startTime);
-                current.setCompletionTime(completionTime);
+            // Nếu tiến trình đang chạy thay đổi (preemption)
+            if (currentProcess != shortestJob) {
+                if (currentProcess != null) {
+                    ganttChart.add(new Pair<>(currentProcess.getId(),
+                            new Pair<>(currentTime - remainingBurstTime[shortestJobIndex], currentTime)));
+                }
+                currentProcess = shortestJob;
+            }
 
-                result.add(new Pair<>(current.getId(), new Pair<>(startTime, completionTime)));
+            // Tiến trình thực thi 1 đơn vị thời gian
+            remainingBurstTime[shortestJobIndex] -= 1;
+            currentTime += 1;
 
-                currentTime = completionTime;
+            // Nếu tiến trình hoàn thành
+            if (remainingBurstTime[shortestJobIndex] <= 0) {
+                currentProcess = null; // Giải phóng tiến trình hiện tại
+                shortestJob.setCompletionTime(currentTime);
+                ganttChart.add(new Pair<>(shortestJob.getId(),
+                        new Pair<>(currentTime - shortestJob.getBurstTime(), currentTime)));
                 completed++;
-            } else {
-                // Nếu không có process nào sẵn sàng, nhảy thời gian lên
-                currentTime += 0.5;
             }
         }
 
-        return result;
+        return ganttChart;
     }
 }

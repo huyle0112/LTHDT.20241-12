@@ -14,7 +14,7 @@ public abstract class Scheduler {
 
     /**
      * Phương thức abstract để lập lịch, trả về danh sách thể hiện
-     * Gantt Chart dưới dạng: 
+     * Gantt Chart dưới dạng:
      * List<Pair<ProcessID, Pair<StartTime, CompletionTime>>>
      */
     public abstract List<Pair<Integer, Pair<Double, Double>>> schedule();

@@ -15,12 +15,12 @@ public class testRoundRobin {
     public static void main(String[] args) {
         Scheduler scheduler;
         List<Process> list = new ArrayList<>();
-        Process process1 = new Process(1, 0.0, 5.0, 0);
-        Process process2 = new Process(2, 0.0, 6.0, 0);
-        Process process3 = new Process(3, 0.0, 7.0, 0);
-        Process process4 = new Process(4, 0.0, 8.0, 0);
-        Process process5 = new Process(5, 0.0, 9.0, 0);
-        Process process6 = new Process(6, 0.0, 10.0, 0);
+        Process process1 = new Process(1, 0.0, 5.0);
+        Process process2 = new Process(2, 0.0, 6.0);
+        Process process3 = new Process(3, 0.0, 7.0);
+        Process process4 = new Process(4, 0.0, 8.0);
+        Process process5 = new Process(5, 0.0, 9.0);
+        Process process6 = new Process(6, 0.0, 10.0);
         list.add(process1);
         list.add(process2);
         list.add(process3);

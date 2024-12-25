@@ -4,18 +4,16 @@ public class Process {
     private int id;
     private double arrivalTime;
     private double burstTime;
-    private int priority;
 
     private double startTime; 
     private double completionTime;
 
     public Process(){}
 
-    public Process(int id, double arrivalTime, double burstTime, int priority) {
+    public Process(int id, double arrivalTime, double burstTime) {
         this.id = id;
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
-        this.priority = priority;
     }
 
     public int getId() {
@@ -36,9 +34,6 @@ public class Process {
     }
     public void setBurstTime(double burstTime) {
         this.burstTime = burstTime;
-    }
-    public void setPriority(int priority) {
-        this.priority = priority;
     }
 
     public double getStartTime() {

@@ -36,7 +36,6 @@
                 <TableColumn fx:id="idColumn" prefWidth="56.0" text="ID" />
                 <TableColumn fx:id="arrivalTimeColumn" prefWidth="91.0" text="Arrival Time" />
                   <TableColumn fx:id="burstTimeColumn" prefWidth="89.0" text="Burst Time" />
-                  <TableColumn fx:id="priorityColumn" prefWidth="74.0" text="Priority" />
               </columns>
             </TableView>
             <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="20.0" prefHeight="71.0" prefWidth="311.0" text="Label">
@@ -45,10 +44,8 @@
                </font></Label>
             <Label layoutX="14.0" layoutY="519.0" prefHeight="10.0" prefWidth="75.0" text="Arrival time" />
             <Label layoutX="14.0" layoutY="568.0" prefHeight="10.0" prefWidth="57.0" text="Burst time" />
-            <Label fx:id="priorityLabel" layoutX="14.0" layoutY="618.0" prefHeight="16.0" prefWidth="57.0" text="Priority " />
             <TextField fx:id="arrivalTimeTextField" layoutX="92.0" layoutY="513.0" prefHeight="39.0" prefWidth="83.0" />
             <TextField fx:id="burstTimeTextField" layoutX="92.0" layoutY="562.0" prefHeight="39.0" prefWidth="83.0" />
-            <TextField fx:id="priorityTextField" layoutX="92.0" layoutY="612.0" prefHeight="39.0" prefWidth="83.0" />
             <TextField fx:id="quantumTimeTextField" layoutX="146.0" layoutY="95.0" prefHeight="39.0" prefWidth="75.0" />
             <Label fx:id="quantumTimeLabel" layoutX="14.0" layoutY="101.0" prefHeight="27.0" prefWidth="123.0" text="Quantum time" />
             <Button fx:id="calculateButton" layoutX="48.0" layoutY="457.0" mnemonicParsing="false" onAction="#handleCalculate" prefHeight="40.0" prefWidth="89.0" text="Calculate">
