@@ -173,7 +173,7 @@ public class SimulationController implements Initializable {
         }
     }
 
-    private void visualizationGanttChart(List<Pair<Integer, Pair<Double, Double>>> resultProcess){
+    private void visualGanttChart(List<Pair<Integer, Pair<Double, Double>>> resultProcess){
         // mô phỏng gantt chart
         List<Pair<Integer, Pair<Double, Double>>> processes = resultProcess;
 
@@ -419,8 +419,8 @@ public class SimulationController implements Initializable {
             scheduler = new RoundRobin(processList, quantumTime);
         }
         List<Pair<Integer, Pair<Double, Double>>> resultProcess = scheduler.schedule();
-        visualizationResultTable(scheduler);
-        visualizationGanttChart(resultProcess);
+        visualResultTable(scheduler);
+        visualGanttChart(resultProcess);
         averageWaitingTimeLabel.setText("Average Waiting Time: " + scheduler.calWaitingTime());
         turnaroundTimeLabel.setText("Turnaround Time: " + scheduler.calTurnaroundTime());
         cpuUtilizationLabel.setText("CPU Utilization: " + scheduler.calCPUUtilization());
@@ -577,7 +577,7 @@ public class SimulationController implements Initializable {
         }
     }
 
-    private void visualizationResultTable(Scheduler scheduler){
+    private void visualResultTable(Scheduler scheduler){
         resultProcessList = FXCollections.observableArrayList(scheduler.getProcesses());
         idResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
         arrivalTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("arrivalTime"));
