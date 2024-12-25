@@ -30,6 +30,15 @@ import java.util.ResourceBundle;
 public class SimulationController implements Initializable {
 
     @FXML
+    public Button resetButton;
+
+    @FXML
+    public Button calculateButton;
+
+    @FXML
+    public Button skipButton;
+
+    @FXML
     public Label priorityLabel;
 
     @FXML
@@ -95,6 +104,7 @@ public class SimulationController implements Initializable {
         burstTimeColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("burstTime"));
         priorityColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("priority"));
         table.setItems(processList);
+        skipButton.setVisible(false);
 
         if(MainMenuController.currentStage.equals("FCFS")){
             // thuật toán lựa chọn là FCFS, ẩn đi các đối tượng không sử dụng
@@ -164,44 +174,60 @@ public class SimulationController implements Initializable {
         SequentialTransition sequence = new SequentialTransition();
         // tạo sequence pause để tiến trình xuất hiện lần lượt
         int index = 0;
-        double time = 0, cnt = 0;
+        double sumWidth = 0, cnt = 0;
         // thêm skip button khi cac tiến trình bắt đầu được mô phỏng
-        Button skipButton = new Button("Skip");
-        skipButton.setLayoutX(pane.getWidth() - 50);
-        skipButton.setLayoutY(pane.getHeight() - 50);
+        skipButton.setVisible(true);
 
         skipButton.setOnAction(event -> {
             // Khi nhấn Skip, bỏ qua hiệu ứng
             skipSequence(sequence, processes, color);
         });
 
-        pane.getChildren().add(skipButton);
+        resetButton.setOnAction(event -> {
+            skipButton.setVisible(false);
+            pane.getChildren().clear();
+            sequence.stop();  // Dừng toàn bộ sequence
+            sequence.getChildren().clear();
+        });
 
+        calculateButton.setOnAction(event -> {
+            skipButton.setVisible(false);
+            pane.getChildren().clear();
+            sequence.stop();  // Dừng toàn bộ sequence
+            sequence.getChildren().clear();
+            handleCalculate(event);
+        });
 
 
         for (double timestamp : timestamps) {
-            double squareWidth = 30 * timestamp;
+            double squareWidth;
+            if (timestamp >= 10) squareWidth = 30 * 10;
+            else squareWidth = 30 * timestamp;
+            double squareHeight = 40;
             double waitTime;
             if(index == 0)waitTime = 0;
-            else waitTime = timestamps.get(index - 1);
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.5 * waitTime));
+            else {
+                if (timestamps.get(index - 1) >= 10) waitTime = 10;
+                else waitTime = timestamps.get(index - 1);
+            }
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.3 * waitTime));
             // chờ 1 khoảng 0.5 * với khoảng thời gian làm việc của tiến trình trước để xuất hiện
             double x, y;
             // nếu độ dài vượt quá thực hiện xuống dòng
-            if((time + timestamp) * 30 > pane.getWidth()) {
-                time = 0;
+            if(sumWidth + squareWidth > pane.getWidth()) {
+                sumWidth = 0;
                 cnt++;
             }
-            x = time * 30;
-            y = cnt * 80;
-            time += timestamp;
+            x = sumWidth;
+            y = cnt * 60;
+            sumWidth += squareWidth;
             String stringSecond1 = String.valueOf(se1.get(index));
             String stringSecond2 = String.valueOf(se2.get(index));
             String curProcess = String.valueOf(currentProcess.get(index));
             Pair<Double, Pair<Double, Double>> currentColor = color.get(currentProcess.get(index) - 1);
             // tiến trình xuất hiện sau khi chờ tiến trình kế trước xuất hiện
             pause.setOnFinished(event -> {
-                Rectangle square = createSquare(currentColor);
+                Rectangle square = createSquare(currentColor, squareHeight);
 
                 square.setX(5 + x);
                 square.setY(20 + y);
@@ -209,32 +235,32 @@ public class SimulationController implements Initializable {
                 pane.getChildren().add(square);
 
                 Text text = new Text("P" + curProcess);
-                text.setFont(new Font("Arial",20));
-                text.setFill(Color.BLACK);
+                text.setFont(new Font("Arial",13));
+                text.setFill(Color.WHITE);
 
                 // tên tiến trình
                 text.setX(square.getX() + squareWidth / 2 - text.getLayoutBounds().getWidth() / 2); // Căn giữa theo chiều ngang
-                text.setY(square.getY() + 50 / 2 + text.getLayoutBounds().getHeight() / 4); // Căn giữa theo chiều dọc
+                text.setY(square.getY() + squareHeight / 2 + text.getLayoutBounds().getHeight() / 4); // Căn giữa theo chiều dọc
 
                 Text second1 = new Text(stringSecond1);
-                second1.setFont(new Font("Times New Roman",12));
+                second1.setFont(new Font("Times New Roman",8));
                 second1.setFill(Color.RED);
                 // thời gian vào
                 second1.setX(square.getX());
                 second1.setY(square.getY());
                 // thời gian ra
                 Text second2 = new Text(stringSecond2);
-                second2.setFont(new Font("Times New Roman",12));
+                second2.setFont(new Font("Times New Roman",8));
                 second2.setFill(Color.RED);
 
                 second2.setX(square.getX() + squareWidth - text.getLayoutBounds().getWidth());
-                second2.setY(square.getY() + 55 + text.getLayoutBounds().getHeight() / 4);
+                second2.setY(square.getY() + squareHeight + 3 + text.getLayoutBounds().getHeight() / 4);
 
                 pane.getChildren().addAll(text, second1, second2);
                 // hiệu ứng cho tiến trình xuất hiện từ từ
                 Timeline timeline = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(square.widthProperty(), 0)), // Bắt đầu từ 0
-                        new KeyFrame(Duration.seconds(0.5 * timestamp), new KeyValue(square.widthProperty(), squareWidth)) // Kết thúc tại squarewidth
+                        new KeyFrame(Duration.seconds(0.01 * squareWidth), new KeyValue(square.widthProperty(), squareWidth)) // Kết thúc tại squarewidth
                 );
                 timeline.setCycleCount(1);
                 timeline.play();
@@ -252,8 +278,8 @@ public class SimulationController implements Initializable {
     }
 
     //square ứng với tiến trình trong ganttchart
-    private Rectangle createSquare(Pair<Double, Pair<Double, Double>> currentColor) {
-        Rectangle square = new Rectangle(0, 0, 0, 50);
+    private Rectangle createSquare(Pair<Double, Pair<Double, Double>> currentColor, double squareHeight) {
+        Rectangle square = new Rectangle(0, 0, 0, squareHeight);
         square.setFill(Color.color(currentColor.getKey(), currentColor.getValue().getKey(), currentColor.getValue().getValue()));
         return square;
     }
@@ -266,9 +292,26 @@ public class SimulationController implements Initializable {
             alertNullTextField();
             return;
         }
+        Double arrivalTime = Double.parseDouble(arrivalTimeTextField.getText());
+        Double burstTime = Double.parseDouble(burstTimeTextField.getText());
+        if(arrivalTime < 0 || burstTime < 0){
+            alertErrorInput();
+            return;
+        }
+        if(burstTime == 0){
+            alertZeroBurstTimeInput();
+            return;
+        }
         newProcess.setArrivalTime(Double.parseDouble(arrivalTimeTextField.getText()));
         newProcess.setBurstTime(Double.parseDouble(burstTimeTextField.getText()));
-        if(MainMenuController.currentStage.equals("SJN"))newProcess.setPriority(Integer.parseInt(priorityTextField.getText()));
+        if(MainMenuController.currentStage.equals("SJN")){
+            int priority = Integer.parseInt(priorityTextField.getText());
+            if(priority < 0){
+                alertErrorInput();
+                return;
+            }
+            newProcess.setPriority(Integer.parseInt(priorityTextField.getText()));
+        }
         else newProcess.setPriority(0);
         // id được set tự động
         if(processList.isEmpty())newProcess.setId(1);
@@ -340,6 +383,10 @@ public class SimulationController implements Initializable {
                 return;
             }
             double quantumTime = Double.parseDouble(quantumTimeTextField.getText());
+            if(quantumTime <= 0) {
+                alertErrorInput();
+                return;
+            }
             schedule = new RoundRobin(processList, quantumTime);
         }
         visualizationGanttChart(schedule);
@@ -392,10 +439,11 @@ public class SimulationController implements Initializable {
 
     private void skipSequence(SequentialTransition sequence, List<Pair<Integer, Pair<Double, Double>>> processes, List<Pair<Double, Pair<Double, Double>>> color) {
         // skip hiệu ứng bằng cách hủy các sequene pause và tạo square ngay lập tức
+        skipButton.setVisible(false);
         pane.getChildren().clear();
         sequence.stop();  // Dừng toàn bộ sequence
         sequence.getChildren().clear();  // Xóa các sự kiện trong sequence
-        double time = 0, cnt = 0;
+        double sumWidth = 0, cnt = 0;
         int index = 0;
 
         List<Double> timestamps = new ArrayList<Double>();
@@ -410,49 +458,53 @@ public class SimulationController implements Initializable {
             se2.add(process.getValue().getValue());
         }
 
+
         for (double timestamp : timestamps) {
             double x, y;
-
-            if ((time + timestamp) * 30 > pane.getWidth()) {
-                time = 0;
+            double squareWidth;
+            double squareHeight = 40;
+            if (timestamp >= 10) squareWidth = 30 * 10;
+            else squareWidth = 30 * timestamp;
+            if (sumWidth + squareWidth > pane.getWidth()) {
+                sumWidth = 0;
                 cnt++;
             }
 
-            x = time * 30;
-            y = cnt * 80;
-            time += timestamp;
+            x = sumWidth;
+            y = cnt * 60;
+            sumWidth += squareWidth;
 
             String stringSecond1 = String.valueOf(se1.get(index));
             String stringSecond2 = String.valueOf(se2.get(index));
             String curProcess = String.valueOf(currentProcess.get(index));
             Pair<Double, Pair<Double, Double>> currentColor = color.get(currentProcess.get(index) - 1);
             // Tạo hình và hiển thị ngay lập tức
-            Rectangle square = createSquare(currentColor);
+            Rectangle square = createSquare(currentColor, squareHeight);
             square.setX(x + 5);
             square.setY(y + 20);
-            square.setWidth(30 * timestamp);
+            square.setWidth(squareWidth);
             pane.getChildren().add(square);
 
             Text text = new Text("P" + curProcess);
-            text.setFont(new Font("Arial", 20));
-            text.setFill(Color.BLACK);
+            text.setFont(new Font("Arial", 13));
+            text.setFill(Color.WHITE);
 
-            text.setX(square.getX() + 30 * timestamp / 2 - text.getLayoutBounds().getWidth() / 2);
-            text.setY(square.getY() + 50 / 2 + text.getLayoutBounds().getHeight() / 4);
+            text.setX(square.getX() + squareWidth / 2 - text.getLayoutBounds().getWidth() / 2);
+            text.setY(square.getY() + squareHeight / 2 + text.getLayoutBounds().getHeight() / 4);
 
             Text second1 = new Text(stringSecond1);
-            second1.setFont(new Font("Times New Roman", 12));
+            second1.setFont(new Font("Times New Roman", 8));
             second1.setFill(Color.RED);
 
             second1.setX(square.getX());
             second1.setY(square.getY());
 
             Text second2 = new Text(stringSecond2);
-            second2.setFont(new Font("Times New Roman", 12));
+            second2.setFont(new Font("Times New Roman", 8));
             second2.setFill(Color.RED);
 
-            second2.setX(square.getX() + 30 * timestamp - text.getLayoutBounds().getWidth());
-            second2.setY(square.getY() + 55 + text.getLayoutBounds().getHeight() / 4);
+            second2.setX(square.getX() + squareWidth - text.getLayoutBounds().getWidth());
+            second2.setY(square.getY() + squareHeight + 3 + text.getLayoutBounds().getHeight() / 4);
 
             pane.getChildren().addAll(text, second1, second2);
 
@@ -466,6 +518,22 @@ public class SimulationController implements Initializable {
         alert.setTitle("Input error");
         alert.setHeaderText(null);
         alert.setContentText("Không được để trống các giá trị.");
+        alert.showAndWait();
+    }
+
+    private void alertZeroBurstTimeInput(){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Input error");
+        alert.setHeaderText(null);
+        alert.setContentText("Burst time phải lớn hơn 0.");
+        alert.showAndWait();
+    }
+
+    private void alertErrorInput(){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Input error");
+        alert.setHeaderText(null);
+        alert.setContentText("Các giá trị phải không âm.");
         alert.showAndWait();
     }
 }
