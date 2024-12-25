@@ -8,6 +8,8 @@ public class Process {
 
     private double startTime; 
     private double completionTime;
+    private double turnaroundTime;
+    private double waitingTime;
 
     public Process(){}
 
@@ -56,5 +58,13 @@ public class Process {
 
     public void setCompletionTime(double completionTime) {
         this.completionTime = completionTime;
+    }
+
+    public double getTurnaroundTime() {
+        return completionTime - arrivalTime;
+    }
+
+    public double getWaitingTime() {
+        return completionTime - arrivalTime - burstTime;
     }
 }

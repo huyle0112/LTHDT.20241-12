@@ -127,28 +127,50 @@
          <children>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="Gantt Chart">
+                  <Label fx:id="titleResultLabel" text="Gantt Chart">
                      <font>
                         <Font size="23.0" />
                      </font>
                      <HBox.margin>
-                        <Insets left="20.0" top="30.0" />
+                        <Insets left="20.0" top="20.0" />
                      </HBox.margin>
                   </Label>
+                  <Button mnemonicParsing="false" onAction="#handleSwap" prefHeight="40.0" prefWidth="70.0" text="Swap">
+                     <HBox.margin>
+                        <Insets left="440.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
-            <ScrollPane fx:id="scrollPane" prefHeight="345.0" prefViewportHeight="385.0" prefViewportWidth="626.0" prefWidth="626.0" style="-fx-border-color: brown;">
-               <content>
-                  <Pane fx:id="pane" prefHeight="4000.0" prefWidth="606.0">
-                     <VBox.margin>
+            <StackPane fx:id="stackPane">
+               <children>
+                  <TableView fx:id="resultTable">
+                    <columns>
+                      <TableColumn fx:id="idResultColumn" prefWidth="69.0" text="ID" />
+                      <TableColumn fx:id="arrivalTimeResultColumn" prefWidth="98.0" text="Arrival Time" />
+                        <TableColumn fx:id="burstTimeResultColumn" prefWidth="104.0" text="Burst Time" />
+                        <TableColumn fx:id="finishTimeResultColumn" prefWidth="113.0" text="Finish Time" />
+                        <TableColumn fx:id="turnaroundTimeResultColumn" prefWidth="115.0" text="Turnaround Time" />
+                        <TableColumn fx:id="waitingTimeResultColumn" prefWidth="123.0" text="Waiting Time" />
+                    </columns>
+                     <StackPane.margin>
                         <Insets left="20.0" right="20.0" />
-                     </VBox.margin>
-                  </Pane>
-               </content>
-               <VBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </VBox.margin>
-            </ScrollPane>
+                     </StackPane.margin>
+                  </TableView>
+                  <ScrollPane fx:id="scrollPane" prefHeight="330.0" prefViewportHeight="385.0" prefViewportWidth="626.0" prefWidth="626.0" style="-fx-border-color: brown;">
+                     <content>
+                        <Pane fx:id="pane" prefHeight="4000.0" prefWidth="606.0">
+                           <VBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </VBox.margin>
+                        </Pane>
+                     </content>
+                     <StackPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </StackPane.margin>
+                  </ScrollPane>
+               </children>
+            </StackPane>
             <HBox fx:id="hBox" alignment="CENTER" prefHeight="39.0">
                <children>
                   <Button fx:id="skipButton" mnemonicParsing="false" text="Skip" />
@@ -158,7 +180,7 @@
                <children>
                   <Label text="Time Metrics">
                      <HBox.margin>
-                        <Insets left="20.0" top="10.0" />
+                        <Insets left="20.0" />
                      </HBox.margin>
                      <font>
                         <Font size="20.0" />
@@ -190,12 +212,15 @@
             </VBox>
             <HBox alignment="CENTER">
                <children>
-                  <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="40.0" prefWidth="89.0" text="Go Back">
+                  <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#handleGoBack" prefHeight="39.0" prefWidth="89.0" text="Go Back">
                      <HBox.margin>
-                        <Insets top="15.0" />
+                        <Insets top="5.0" />
                      </HBox.margin>
                   </Button>
                </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>
