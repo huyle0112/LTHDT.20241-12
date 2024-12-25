@@ -27,6 +27,7 @@ public class Process {
     public double getBurstTime() {
         return burstTime;
     }
+    public int getPriority() {return priority;}
 
     public void setId(int id) {
         this.id = id;
