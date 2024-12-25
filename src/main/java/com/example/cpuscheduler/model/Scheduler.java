@@ -12,6 +12,9 @@ public abstract class Scheduler {
         this.processes = new ArrayList<>(processes);
     }
 
+    public List<Process> getProcesses() {
+        return processes;
+    }
     /**
      * Phương thức abstract để lập lịch, trả về danh sách thể hiện
      * Gantt Chart dưới dạng: 

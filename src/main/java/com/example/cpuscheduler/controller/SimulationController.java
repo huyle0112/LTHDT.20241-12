@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -30,16 +31,43 @@ import java.util.ResourceBundle;
 public class SimulationController implements Initializable {
 
     @FXML
-    public Button resetButton;
+    private StackPane stackPane;
 
     @FXML
-    public Button calculateButton;
+    private Label titleResultLabel;
 
     @FXML
-    public Button skipButton;
+    private TableView<Process> resultTable;
 
     @FXML
-    public Label priorityLabel;
+    private TableColumn<Process, Integer> idResultColumn;
+
+    @FXML
+    private TableColumn<Process, Double> burstTimeResultColumn;
+
+    @FXML
+    private TableColumn<Process, Double> finishTimeResultColumn;
+
+    @FXML
+    private TableColumn<Process, Double> turnaroundTimeResultColumn;
+
+    @FXML
+    private TableColumn<Process, Double> waitingTimeResultColumn;
+
+    @FXML
+    private TableColumn<Process, Double> arrivalTimeResultColumn;
+
+    @FXML
+    private Button resetButton;
+
+    @FXML
+    private Button calculateButton;
+
+    @FXML
+    private Button skipButton;
+
+    @FXML
+    private Label priorityLabel;
 
     @FXML
     private Pane pane;
@@ -49,7 +77,6 @@ public class SimulationController implements Initializable {
 
     @FXML
     private TextField quantumTimeTextField;
-
 
     @FXML
     private TextField burstTimeTextField;
@@ -88,6 +115,8 @@ public class SimulationController implements Initializable {
     private Label cpuUtilizationLabel;
 
     private ObservableList<Process> processList;
+
+    private ObservableList<Process> resultProcessList;
 
 
     @Override
@@ -144,9 +173,9 @@ public class SimulationController implements Initializable {
         }
     }
 
-    private void visualizationGanttChart(Scheduler scheduler){
+    private void visualizationGanttChart(List<Pair<Integer, Pair<Double, Double>>> resultProcess){
         // mô phỏng gantt chart
-        List<Pair<Integer, Pair<Double, Double>>> processes = scheduler.schedule();
+        List<Pair<Integer, Pair<Double, Double>>> processes = resultProcess;
 
         List<Double> timestamps = new ArrayList<Double>(); // các khoảng thời gian làm việc của CPU
         List<Integer> currentProcess = new ArrayList<Integer>(); // list thứ tự làm việc của tiến trình
@@ -369,13 +398,13 @@ public class SimulationController implements Initializable {
     public void handleCalculate(ActionEvent event) {
         // reset ganttchart và các giá trị time metrics trước khi tính
         handleReset();
-        Scheduler schedule;
+        Scheduler scheduler;
         if(MainMenuController.currentStage.equals("FCFS")) {
             // ép kiểu FCFS
-            schedule = new FCFS(processList);
+            scheduler = new FCFS(processList);
         }else if(MainMenuController.currentStage.equals("SJN")){
             // ép kiểu SJN
-            schedule = new SJN(processList);
+            scheduler = new SJN(processList);
         }else{
             // ép kiểu Round Robin
             if(quantumTimeTextField.getText().equals("")) {
@@ -387,12 +416,14 @@ public class SimulationController implements Initializable {
                 alertErrorInput();
                 return;
             }
-            schedule = new RoundRobin(processList, quantumTime);
+            scheduler = new RoundRobin(processList, quantumTime);
         }
-        visualizationGanttChart(schedule);
-        averageWaitingTimeLabel.setText("Average Waiting Time: " + schedule.calWaitingTime());
-        turnaroundTimeLabel.setText("Turnaround Time: " + schedule.calTurnaroundTime());
-        cpuUtilizationLabel.setText("CPU Utilization: " + schedule.calCPUUtilization());
+        List<Pair<Integer, Pair<Double, Double>>> resultProcess = scheduler.schedule();
+        visualizationResultTable(scheduler);
+        visualizationGanttChart(resultProcess);
+        averageWaitingTimeLabel.setText("Average Waiting Time: " + scheduler.calWaitingTime());
+        turnaroundTimeLabel.setText("Turnaround Time: " + scheduler.calTurnaroundTime());
+        cpuUtilizationLabel.setText("CPU Utilization: " + scheduler.calCPUUtilization());
     }
 
     public void handleReset(){
@@ -535,6 +566,26 @@ public class SimulationController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("Các giá trị phải không âm.");
         alert.showAndWait();
+    }
+
+    public void handleSwap(){
+        stackPane.getChildren().getFirst().toFront();
+        if(stackPane.getChildren().getFirst() != resultTable){
+            titleResultLabel.setText("Result Table");
+        }else{
+            titleResultLabel.setText("Gantt Chart");
+        }
+    }
+
+    private void visualizationResultTable(Scheduler scheduler){
+        resultProcessList = FXCollections.observableArrayList(scheduler.getProcesses());
+        idResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Integer>("id"));
+        arrivalTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("arrivalTime"));
+        burstTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("burstTime"));
+        finishTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("completionTime"));
+        turnaroundTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("turnaroundTime"));
+        waitingTimeResultColumn.setCellValueFactory(new PropertyValueFactory<Process, Double>("waitingTime"));
+        resultTable.setItems(resultProcessList);
     }
 }
 
