@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
@@ -26,10 +25,10 @@ public class MainMenuController {
     }
 
     @FXML
-    void handleSJN(ActionEvent event) throws IOException {
-        // thuật toán lựa chọn là SJN
-        currentStage = "SJN";
-        openStageSimulation("SJN", event);
+    void handleSJF(ActionEvent event) throws IOException {
+        // thuật toán lựa chọn là SJF
+        currentStage = "SJF";
+        openStageSimulation("SJF", event);
     }
 
     @FXML
@@ -43,21 +42,25 @@ public class MainMenuController {
     void handleHelp(){
         // giải thích thuật toán bằng alert information
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Giải thích thuật toán");
+        alert.setTitle("Algorithm Explain.");
         alert.setHeaderText(null);
         alert.setResizable(false);
         alert.getDialogPane().setPrefSize(500, 350);
         alert.setContentText("""
-                FCFS(First Come First Serve): thực hiện các tiến trình theo thời gian xuất hiện trong CPU, tức là
-                tiến trình nào có arrival time nhỏ nhất sẽ được thực hiện trước.
+                FCFS (First-Come, First-Served) is a CPU scheduling algorithm where processes 
+                are executed in the order they arrive. The first process to arrive is 
+                executed first, without preemption. It is simple but can lead to the 
+                "convoy effect," where shorter processes get delayed behind longer ones.
                 
-                SJN(Short Job Next): mỗi khi có 1 tiến trình mới xuất hiện trong hệ thống, tiến trình hiện tại được
-                đưa lại vào ready queue, sau đó tiến trình có burst time nhỏ nhất sẽ được lựa chọn để thực thi, khi
-                có nhiều tiến trình có cùng burst time nhỏ nhất, tiến trình có độ ưu tiên cao hơn được lựa chọn.
+                SJF (Shortest Job First) is a CPU scheduling algorithm that selects the process 
+                with the shortest burst time to execute next. It minimizes average waiting time 
+                and improves efficiency but can cause starvation if shorter processes keep 
+                arriving, delaying longer ones. It can be preemptive or non-preemptive.
                 
-                RR(Round Robin): mỗi tiến trình được cấp một khoảng thời gian cố định quantum time, các tiến trình
-                xuất hiện trong hệ thống được xếp vào cuối hàng đợi, khi 1 tiến trình hết quantum time mà chưa
-                hoàn thành, nó được xếp vào cuối hàng đợi.
+                RR (Round Robin) is a CPU scheduling algorithm that assigns a fixed time slice 
+                (quantum) to each process in a cyclic order. If a process doesn't finish within 
+                its time slice, it is moved to the end of the queue. This ensures fair CPU 
+                allocation and reduces waiting time but may increase context switching overhead.
                 """);
         alert.showAndWait().ifPresent(response -> {
             if(response == ButtonType.YES){
@@ -81,7 +84,7 @@ public class MainMenuController {
         newStage.setResizable(false);
         newStage.show();
         newStage.setOnCloseRequest(e->{
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Thoát chương trình?", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Exit program?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Exit Confirmation");
             alert.setHeaderText(null);
 
@@ -94,7 +97,7 @@ public class MainMenuController {
     private void setupCloseConfirmation(Stage stage) throws IOException {
         // hộp thoại xác nhận đóng chương trình
         stage.setOnCloseRequest(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Thoát chương trình?", ButtonType.YES, ButtonType.NO);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Exit program?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Exit Confirmation");
             alert.setHeaderText(null);
 

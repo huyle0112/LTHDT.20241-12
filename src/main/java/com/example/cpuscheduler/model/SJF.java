@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class SJN extends Scheduler {
+public class SJF extends Scheduler {
 
-    public SJN(List<Process> processes) {
+    public SJF(List<Process> processes) {
         super(processes);
     }
 
