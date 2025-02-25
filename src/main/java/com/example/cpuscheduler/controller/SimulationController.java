@@ -150,12 +150,12 @@ public class SimulationController implements Initializable {
                 """);
         }
 
-        if(MainMenuController.currentStage.equals("SJN")){
-            // thuật toán sử dụng là SJN, ẩn đi các đối tượng không sử dụng
+        if(MainMenuController.currentStage.equals("SJF")){
+            // thuật toán sử dụng là SJF, ẩn đi các đối tượng không sử dụng
             quantumTimeLabel.setVisible(false);
             quantumTimeTextField.setVisible(false);
             titleLabel.setText("""
-                SJN(Short Job Next)
+                SJF(Short Job First)
                 """);
         }
 
@@ -333,7 +333,7 @@ public class SimulationController implements Initializable {
         }
         newProcess.setArrivalTime(Double.parseDouble(arrivalTimeTextField.getText()));
         newProcess.setBurstTime(Double.parseDouble(burstTimeTextField.getText()));
-        if(MainMenuController.currentStage.equals("SJN")){
+        if(MainMenuController.currentStage.equals("SJF")){
             int priority = Integer.parseInt(priorityTextField.getText());
             if(priority < 0){
                 alertErrorInput();
@@ -371,7 +371,7 @@ public class SimulationController implements Initializable {
 
     public void handleGoBack(ActionEvent event) throws IOException {
         // trở lại stage main menu, hiện thông báo
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Thoát " + MainMenuController.currentStage + " simulation?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Exit " + MainMenuController.currentStage + " simulation?", ButtonType.YES, ButtonType.NO);
         alert.setTitle("Exit simulation Confirmation");
         alert.setHeaderText(null);
 
@@ -402,9 +402,9 @@ public class SimulationController implements Initializable {
         if(MainMenuController.currentStage.equals("FCFS")) {
             // ép kiểu FCFS
             scheduler = new FCFS(processList);
-        }else if(MainMenuController.currentStage.equals("SJN")){
-            // ép kiểu SJN
-            scheduler = new SJN(processList);
+        }else if(MainMenuController.currentStage.equals("SJF")){
+            // ép kiểu SJF
+            scheduler = new SJF(processList);
         }else{
             // ép kiểu Round Robin
             if(quantumTimeTextField.getText().equals("")) {
@@ -437,26 +437,30 @@ public class SimulationController implements Initializable {
     public void handleHelp(){
         // giải thích thuật toán hiện tại
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Giải thích thuật toán");
+        alert.setTitle("Algorithm Explain.");
         alert.setHeaderText(null);
         alert.setResizable(false);
         alert.getDialogPane().setPrefSize(500, 200);
         if(MainMenuController.currentStage.equals("FCFS")) {
             alert.setContentText("""
-                FCFS(First Come First Serve): thực hiện các tiến trình theo thời gian xuất hiện trong CPU, tức là
-                tiến trình nào có arrival time nhỏ nhất sẽ được thực hiện trước.
+                FCFS (First-Come, First-Served) is a CPU scheduling algorithm where processes 
+                are executed in the order they arrive. The first process to arrive is 
+                executed first, without preemption. It is simple but can lead to the 
+                "convoy effect," where shorter processes get delayed behind longer ones.
                 """);
-        }else if(MainMenuController.currentStage.equals("SJN")){
+        }else if(MainMenuController.currentStage.equals("SJF")){
             alert.setContentText("""
-                SJN(Short Job Next): mỗi khi có 1 tiến trình mới xuất hiện trong hệ thống, tiến trình hiện tại được
-                đưa lại vào ready queue, sau đó tiến trình có burst time nhỏ nhất sẽ được lựa chọn để thực thi, khi
-                có nhiều tiến trình có cùng burst time nhỏ nhất, tiến trình có độ ưu tiên cao hơn được lựa chọn.
+                SJF (Shortest Job First) is a CPU scheduling algorithm that selects the process 
+                with the shortest burst time to execute next. It minimizes average waiting time 
+                and improves efficiency but can cause starvation if shorter processes keep 
+                arriving, delaying longer ones. It can be preemptive or non-preemptive.
                 """);
         }else{
             alert.setContentText("""
-                RR(Round Robin): mỗi tiến trình được cấp một khoảng thời gian cố định quantum time, các tiến trình
-                xuất hiện trong hệ thống được xếp vào cuối hàng đợi, khi 1 tiến trình hết quantum time mà chưa
-                hoàn thành, nó được xếp vào cuối hàng đợi.
+                RR (Round Robin) is a CPU scheduling algorithm that assigns a fixed time slice 
+                (quantum) to each process in a cyclic order. If a process doesn't finish within 
+                its time slice, it is moved to the end of the queue. This ensures fair CPU 
+                allocation and reduces waiting time but may increase context switching overhead.
                 """);
         }
         alert.showAndWait().ifPresent(response -> {
@@ -548,7 +552,7 @@ public class SimulationController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Input error");
         alert.setHeaderText(null);
-        alert.setContentText("Không được để trống các giá trị.");
+        alert.setContentText("Values cannot be left empty.");
         alert.showAndWait();
     }
 
@@ -556,7 +560,7 @@ public class SimulationController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Input error");
         alert.setHeaderText(null);
-        alert.setContentText("Burst time phải lớn hơn 0.");
+        alert.setContentText("Burst time must be greater than 0.");
         alert.showAndWait();
     }
 
@@ -564,7 +568,7 @@ public class SimulationController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Input error");
         alert.setHeaderText(null);
-        alert.setContentText("Các giá trị phải không âm.");
+        alert.setContentText("Values must be non-negative.");
         alert.showAndWait();
     }
 
